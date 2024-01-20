@@ -1,0 +1,60 @@
+-- Tabla de videos
+CREATE TABLE videos (
+  id INT PRIMARY KEY, -- Clave primaria
+  titulo VARCHAR(255) NOT NULL, -- Título del video
+  descripcion TEXT, -- Descripción del video
+  url VARCHAR(255) NOT NULL, -- URL del video
+  fecha DATE NOT NULL, -- Fecha de publicación
+  autor_id INT NOT NULL, -- Clave foránea que referencia al autor
+  FOREIGN KEY (autor_id) REFERENCES autores(id) -- Restricción de integridad referencial
+);
+
+--Tabla de autores
+CREATE TABLE autores (
+  id INT PRIMARY KEY, -- Clave primaria
+  nombre VARCHAR(255) NOT NULL, -- Nombre del autor
+  email VARCHAR(255) UNIQUE NOT NULL, -- Email del autor
+  biografia TEXT -- Biografía del autor
+);
+
+-- Tabla de colaboradores
+CREATE TABLE colaboradores (
+  video_id INT NOT NULL, -- Clave foránea que referencia al video
+  autor_id INT NOT NULL, -- Clave foránea que referencia al autor
+  rol VARCHAR(255) NOT NULL, -- Rol del colaborador
+  PRIMARY KEY (video_id, autor_id), -- Clave primaria compuesta
+  FOREIGN KEY (video_id) REFERENCES videos(id), -- Restricción de integridad referencial
+  FOREIGN KEY (autor_id) REFERENCES autores(id) -- Restricción de integridad referencial
+);
+
+-- Tabla de comentarios
+CREATE TABLE comentarios (
+  id INT PRIMARY KEY, -- Clave primaria
+  texto TEXT NOT NULL, -- Texto del comentario
+  fecha DATETIME NOT NULL, -- Fecha y hora del comentario
+  video_id INT NOT NULL, -- Clave foránea que referencia al video
+  usuario_id INT NOT NULL, -- Clave foránea que referencia al usuario
+  FOREIGN KEY (video_id) REFERENCES videos(id), -- Restricción de integridad referencial
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) -- Restricción de integridad referencial
+);
+
+-- Tabla de reviews
+CREATE TABLE reviews (
+  id INT PRIMARY KEY, -- Clave primaria
+  calificacion INT NOT NULL, -- Calificación del video
+  opinion TEXT, -- Opinión del video
+  fecha DATETIME NOT NULL, -- Fecha y hora del review
+  video_id INT NOT NULL, -- Clave foránea que referencia al video
+  usuario_id INT NOT NULL, -- Clave foránea que referencia al usuario
+  FOREIGN KEY (video_id) REFERENCES videos(id), -- Restricción de integridad referencial
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) -- Restricción de integridad referencial
+);
+
+-- Tabla de usuarios
+CREATE TABLE usuarios (
+  id INT PRIMARY KEY, -- Clave primaria
+  nombre VARCHAR(255) NOT NULL, -- Nombre del usuario
+  email VARCHAR(255) UNIQUE NOT NULL, -- Email del usuario
+  contraseña VARCHAR(255) NOT NULL, -- Contraseña del usuario
+  tipo VARCHAR(255) NOT NULL -- Tipo de usuario (normal, premium, administrador)
+);
